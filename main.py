@@ -51,7 +51,7 @@ if choice == 's':
 
 	sock.send(f"{file_name}{SEPARATOR}{file_size}".encode())
 
-	progress = tqdm.tqdm(range(file_size), f"Sending {file_name}", unit='B', unit_scale=True, unit_divisor=1024)
+	progress = tqdm.tqdm(range(file_size), "Sending {}".format(file_name), unit='B', unit_scale=True, unit_divisor=1024)
 	with open(file_name, 'rb') as file:
 		for _ in progress:
 			bytes_read = file.read(BUFFER_SIZE)
@@ -81,6 +81,8 @@ else:
 
 	server.bind((host, port))
 
+	print('\nWaiting for connection...')
+
 	server.listen(5)
 
 	client, address = server.accept()
@@ -93,7 +95,7 @@ else:
 
 	file_size = int(file_size)
 
-	progress = tqdm.tqdm(range(file_size), 'Receiving {}'.format(file_name), unit='B', unit_scale=True, unit_divisor=1024)
+	progress = tqdm.tqdm(range(file_size), '\nReceiving {}'.format(file_name), unit='B', unit_scale=True, unit_divisor=1024)
 
 	with open(file_name, 'wb') as file:
 
@@ -108,3 +110,7 @@ else:
 			file.write(bytes_read)
 
 			progress.update(len(bytes_read))
+
+print('Transfer success!')
+print('Press any key to exit...')
+input()
