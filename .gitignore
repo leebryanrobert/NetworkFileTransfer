@@ -11,3 +11,5 @@ build/
 *.zip
 *.PNG
 *.jpg
+Downloads/
+*.mkv

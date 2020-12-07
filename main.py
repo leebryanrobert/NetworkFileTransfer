@@ -87,14 +87,17 @@ if event == "HOST":
 
 		
 		window.close()
-		receivinglayout=[[sg.Text("Recieving file, Please Wait...")]]
+		receivinglayout=[[sg.Text("Receiving file, Please Wait...")]]
 		window = sg.Window("",receivinglayout,margins=(20,20),location=(Width/2,Height/3))
 		event, values = window.read(timeout=1)
 		#window.close()
 
 		progress = tqdm.tqdm(range(file_size), '\nReceiving {}'.format(file_name), unit='B', unit_scale=True, unit_divisor=1024)
 
-		with open(file_name, 'wb') as file:
+		if not os.path.exists('Downloads'):
+			os.makedirs('Downloads')
+
+		with open('Downloads/{}'.format(file_name), 'wb') as file:
 
 			for _ in progress:
 				bytes_read = client.recv(BUFFER_SIZE)
@@ -109,14 +112,10 @@ if event == "HOST":
 
 				progress.update(len(bytes_read))
 
-		filesent=True
 				
-		#window.close()
+		window.close()
 
-		if filesent == True:
-			donelayout = [[sg.Text("File Recieved Succesfully!")]]
-
-			sg.PopupTimed("File Recieved Succesfully",location=(Width/4,(Height/2)-100),auto_close=True,auto_close_duration=(4000))
+		sg.PopupTimed("File Received Succesfully",location=(Width/4,(Height/2)-100),auto_close=True,auto_close_duration=(4))
 
 
 #code for client side
