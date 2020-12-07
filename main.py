@@ -115,7 +115,7 @@ if event == "HOST":
 				
 		window.close()
 
-		sg.PopupTimed("File Received Succesfully",location=(Width/4,(Height/2)-100),auto_close=True,auto_close_duration=(4))
+		sg.PopupTimed("File Received Succesfully...\nProgram will now close",location=(Width/4,(Height/2)-100),auto_close=True,auto_close_duration=(4))
 
 
 #code for client side
@@ -212,12 +212,9 @@ if event == "CLIENT":
 					filename = os.path.join(
 						values["-FOLDER-"], values["-FILE LIST-"][0]
 					)
-					
-					print(filename)
-					print(len(filename))
 				except:
 					pass
-			print(len(filename))
+
 			if event == "Send" and len(filename) != 0:
 				break
 			elif event == "Send" and len(filename) == 0:
@@ -245,7 +242,7 @@ if event == "CLIENT":
 				print(filename)
 			filesent=True
 
-		#window.close()
+		window.close()
 		if filesent==True:
 			endlayout = [[sg.Text("File Transfer Complete...\nProgram will now close")]]
 			window = sg.Window("Client End",endlayout,margins=(20,20))
