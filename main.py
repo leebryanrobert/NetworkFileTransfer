@@ -4,6 +4,7 @@ import re
 import fnmatch
 import os
 import socket
+import time
 import tqdm
 
 
@@ -65,12 +66,12 @@ if event == "HOST":
 		window.close()
 
 		#displays window that shows user which port they are listening on for a few seconds
-		message = "Waiting on port " + str(port)
+		message = "Listening on: Port {}...".format(port)
 		sentlayout = [[sg.Text(message)]]
 		window = sg.Window("",layout=sentlayout,margins=(20,20))
 
-		event, values = window.read(timeout=3000)
-		window.close()
+		event, values = window.read(timeout=1)
+		#window.close()
 		
 		server.listen(5)
 		
@@ -84,10 +85,11 @@ if event == "HOST":
 
 		file_size = int(file_size)
 
+		window.close()
 		receivinglayout=[[sg.Text("Recieving file, Please Wait...")]]
 		window = sg.Window("",receivinglayout,margins=(20,20),location=(Width/2,Height/3))
-		event, values = window.read(timeout=2000)
-		window.close()
+		event, values = window.read(timeout=1)
+		#window.close()
 
 		progress = tqdm.tqdm(range(file_size), '\nReceiving {}'.format(file_name), unit='B', unit_scale=True, unit_divisor=1024)
 
@@ -105,14 +107,13 @@ if event == "HOST":
 				file.write(bytes_read)
 
 				progress.update(len(bytes_read))
-				
+
 		window.close()
-
 		donelayout = [[sg.Text("File Recieved Succesfully!")]]
-		event, values = sg.Window("",donelayout,margins=(20,20),location=(Width/4,(Height/2)-100)).read(timeout=4000)
-	
- 
-
+		window1 = sg.Window("",donelayout,margins=(20,20),location=(Width/4,(Height/2)-100))
+		event, values = window1.read(timeout=4000)
+		time.sleep(4000)
+		window1.close()
 
 #code for client side
 if event == "CLIENT":
@@ -243,9 +244,7 @@ if event == "CLIENT":
 
 		window.close()
 		if filesent==True:
-			endlayout = [[sg.Text("File Sent. Program will now close")]]
+			endlayout = [[sg.Text("File Transfer Complete...\nProgram will now close")]]
 			window = sg.Window("Client End",endlayout,margins=(20,20))
-			event, values = window.read(timeout = 3000)
+			event, values = window.read(timeout = 4000)
 			window.close()
-
-
