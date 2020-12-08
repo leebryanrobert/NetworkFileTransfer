@@ -108,12 +108,15 @@ if event == "HOST":
 		with open('Downloads/{}'.format(file_name), 'wb') as file:
 
 			for _ in progress:
+				client.send(Random.get_random_bytes(1))
 				data = client.recv(BUFFER_SIZE)
 				if not data:
 					client.close()
 					server.close()
 					break
+				client.send(Random.get_random_bytes(1))
 				tag = client.recv(16)
+				client.send(Random.get_random_bytes(1))
 				nonce = client.recv(16)
 				#Create AES cipher from session key
 				aes_cipher = AES.new(session_key, AES.MODE_EAX, nonce)
@@ -263,8 +266,11 @@ if event == "CLIENT":
 					#Create AES cipher for encrypting data
 					aes_cipher = AES.new(session_key, AES.MODE_EAX)
 					data, tag = aes_cipher.encrypt_and_digest(bytes_read)
+					sock.recv(1)
 					sock.send(data)
+					sock.recv(1)
 					sock.send(tag)
+					sock.recv(1)
 					sock.send(aes_cipher.nonce)
 					progress.update(len(bytes_read))
 				print(filename)
